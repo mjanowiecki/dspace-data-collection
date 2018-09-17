@@ -1,8 +1,8 @@
 # dspace-data-collection
 
-**findInitialedNamesByCommunity.py**
+**findInitialedNamesByCollection.py**
 
-This script finds names with initials in DSpace based on regular expression matches and prints the results to a CSV.
+This script finds names with initials in DSpace collections based on regular expression matches and prints the results to a CSV.
 
 In particular, it searches for names where the first name is an initial and has not been expanded. It ignores most instances of names where the initial is a middle initial.
 
