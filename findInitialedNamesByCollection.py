@@ -80,17 +80,18 @@ while items != []:
                             elif contains_parentheses:
                                 continue
                             elif contains_initials:
-                                    name = {'name' : individual_name, 'link' : uri, 'key' : key}
+                                    name = {'link' : uri, 'name' : individual_name, 'key' : key}
                                     names.append(name)
                             else:
                                 continue
-
+            name = {'link' : '', 'name' : '', 'key' : ''}
+            names.append(name)
     offset = offset + 200
     print offset
 
 handle = handle.replace('/', '-')
-print names
 keys = names[0].keys()
+
 with open('namesInitialsInCollection'+handle+'.csv', 'wb') as name_file:
     f = csv.DictWriter(name_file, keys)
     f.writeheader()
