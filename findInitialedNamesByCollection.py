@@ -7,6 +7,16 @@ import time
 import urllib3
 import argparse
 
+secretsVersion = raw_input('To edit production server, enter the name of the secrets file: ')
+if secretsVersion != '':
+    try:
+        secrets = __import__(secretsVersion)
+        print 'Editing Production'
+    except ImportError:
+        print 'Editing Stage'
+else:
+    print 'Editing Stage'
+
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--handle', help='handle of the collection to retreive. optional - if not provided, the script will ask for input')
 args = parser.parse_args()
@@ -17,17 +27,6 @@ else:
     handle = raw_input('Enter collection handle: ')
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-
-secretsVersion = raw_input('To edit production server, enter the name of the secrets file: ')
-if secretsVersion != '':
-    try:
-        secrets = __import__(secretsVersion)
-        print 'Editing Production'
-    except ImportError:
-        print 'Editing Stage'
-else:
-    print 'Editing Stage'
 
 baseURL = secrets.baseURL
 email = secrets.email
@@ -80,17 +79,18 @@ while items != []:
                             elif contains_parentheses:
                                 continue
                             elif contains_initials:
-                                    name = {'name' : individual_name, 'link' : uri, 'key' : key}
+                                    name = {'link' : uri, 'name' : individual_name, 'key' : key}
                                     names.append(name)
                             else:
                                 continue
-
+            name = {'link' : '', 'name' : '', 'key' : ''}
+            names.append(name)
     offset = offset + 200
     print offset
 
 handle = handle.replace('/', '-')
-print names
 keys = names[0].keys()
+
 with open('namesInitialsInCollection'+handle+'.csv', 'wb') as name_file:
     f = csv.DictWriter(name_file, keys)
     f.writeheader()
