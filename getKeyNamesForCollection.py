@@ -5,15 +5,15 @@ import csv
 import time
 import urllib3
 
-secretsVersion = raw_input('To edit production server, enter the name of the secrets file: ')
+secretsVersion = input('To edit production server, enter the name of the secrets file: ')
 if secretsVersion != '':
     try:
         secrets = __import__(secretsVersion)
-        print 'Editing Production'
+        print('Editing Production')
     except ImportError:
-        print 'Editing Stage'
+        print('Editing Stage')
 else:
-    print 'Editing Stage'
+    print('Editing Stage')
 
 baseURL = secrets.baseURL
 email = secrets.email
@@ -23,7 +23,7 @@ verify = secrets.verify
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-collectionHandle = raw_input('enter collection handle please:' )
+collectionHandle = input('enter collection handle please:' )
 
 
 startTime = time.time()
@@ -31,14 +31,14 @@ data = json.dumps({'email':email,'password':password})
 header = {'content-type':'application/json','accept':'application/json'}
 session = requests.post(baseURL+'/rest/login', headers=header, verify=verify, data=data).content
 headerAuth = {'content-type':'application/json','accept':'application/json', 'rest-dspace-token':session}
-print 'authenticated'
+print('authenticated')
 
 
 itemList = []
 endpoint = baseURL+'/rest/handle/'+collectionHandle
 collection = requests.get(endpoint, headers=headerAuth, verify=verify).json()
 collectionID = collection['uuid']
-print collectionID
+print(collectionID)
 offset = 0
 items = ''
 while items != []:
@@ -51,11 +51,11 @@ while items != []:
         itemID = items[k]['uuid']
         itemList.append(itemID)
     offset = offset + 200
-    print offset
+    print(offset)
 elapsedTime = time.time() - startTime
 m, s = divmod(elapsedTime, 60)
 h, m = divmod(m, 60)
-print 'Item list creation time: ','%d:%02d:%02d' % (h, m, s)
+print('Item list creation time: ','%d:%02d:%02d' % (h, m, s))
 
 dcElements = []
 for number, itemID in enumerate(itemList):
@@ -68,5 +68,5 @@ for number, itemID in enumerate(itemList):
             pass
         if keys not in dcElements:
             dcElements.append(keys)
-print len(dcElements)
-print "\'] + [\'".join(dcElements)
+print(len(dcElements))
+print("\'] + [\'".join(dcElements))
